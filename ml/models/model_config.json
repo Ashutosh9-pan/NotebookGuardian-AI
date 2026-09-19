@@ -1,0 +1,38 @@
+{
+    "model_name": "NotebookGuardian Logistic Regression",
+    "version": "1.0.0",
+    "threshold": 0.55,
+    "selected_features": [
+        "was_executed",
+        "execution_count",
+        "source_length",
+        "line_count",
+        "num_names_loaded",
+        "num_names_stored",
+        "num_function_defs",
+        "num_imports",
+        "num_attributes",
+        "num_for",
+        "num_while",
+        "num_if",
+        "num_assignments",
+        "num_returns",
+        "num_constants",
+        "num_subscripts",
+        "has_fit",
+        "has_inplace",
+        "has_gpu_keyword",
+        "has_read_csv"
+    ],
+    "training_rows": 3643,
+    "training_cases": 111,
+    "risky_cells": 279,
+    "normal_cells": 3364,
+    "validation": {
+        "split_strategy": "group-wise notebook case split",
+        "best_test_precision": 0.3314,
+        "best_test_recall": 0.75,
+        "best_test_f1": 0.4597,
+        "selected_threshold": 0.55
+    }
+}

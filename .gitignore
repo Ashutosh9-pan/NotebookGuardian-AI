@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+.DS_Store
+
+# Local ML data and generated models
+ml/data/raw/
+
+# Frontend dependencies/build
+frontend/node_modules/
+frontend/dist/
