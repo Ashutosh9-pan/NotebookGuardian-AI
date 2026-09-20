@@ -2,440 +2,160 @@
 
 > **AI-powered Jupyter Notebook risk analysis and review assistant**
 
-NotebookGuardian AI is a machine-learning-powered tool that analyzes Jupyter Notebook (`.ipynb`) files and identifies cells that may require review based on **code risk** and **execution risk**.
+NotebookGuardian AI analyzes Jupyter Notebook (<code>.ipynb</code>) files at the **cell level** and separates potential **code-structure risk** from **execution-state risk**.
 
-It combines notebook metadata, code structure, execution state, and machine-learning models to provide **cell-level risk scores, explanations, detected signals, and review suggestions** through a modern web dashboard.
+It combines Python/AST-based feature extraction, machine-learning models, notebook execution metadata, explainable risk signals, and a production web dashboard to help users identify notebook cells that may deserve review.
 
----
-
-## 🚀 Live Demo
-
-### 🌐 Production
-
-- **Live Application:** https://notebook-guardian-ai.vercel.app/
-- **Backend API:** https://notebookguardian-ai.onrender.com/
-- **GitHub Repository:** https://github.com/Ashutosh9-pan/NotebookGuardian-AI
-
-The production deployment uses **Vercel** for the React + Vite frontend and **Render** for the FastAPI backend and ML inference service.
+<p align="center">
+  <a href="https://notebook-guardian-ai.vercel.app/"><strong>🌐 Live Demo</strong></a>
+  ·
+  <a href="https://github.com/Ashutosh9-pan/NotebookGuardian-AI"><strong>💻 GitHub</strong></a>
+</p>
 
 ---
 
-## ✨ Features
+## 🚀 Production
 
-- 📓 Analyze Jupyter Notebook (`.ipynb`) files
-- 🤖 Machine-learning-based risk detection
-- 🔍 Dual-risk analysis:
-  - **Code Risk**
-  - **Execution Risk**
+| Service | Deployment |
+|---|---|
+| **Frontend** | Vercel — React + Vite |
+| **Backend** | Render — FastAPI + Uvicorn |
+| **ML Inference** | scikit-learn + Joblib |
+| **Source Control** | GitHub |
+
+**Live Application:** https://notebook-guardian-ai.vercel.app/
+
+**Backend API:** https://notebookguardian-ai-1.onrender.com/
+
+---
+
+## ✨ Key Features
+
+- 📓 Upload and analyze Jupyter Notebook (<code>.ipynb</code>) files
+- 🤖 ML-powered cell-level risk detection
+- 🧩 **Dual-risk analysis**
+  - Code Risk
+  - Execution Risk
 - 📊 Interactive risk distribution dashboard
-- 🚨 Cell-level risk scores
-- 🏷️ High / Medium / Low risk classification
+- 🚨 High / Medium / Low risk classification
 - 💡 **Why is this flagged?** explanations
 - 🔎 Search and risk-level filtering
-- 🧩 Full code preview
-- 📋 Copy code directly from the preview
-- 📄 Generate downloadable PDF analysis reports
+- 🧑‍💻 Code preview with copy support
+- 📄 Downloadable PDF analysis reports
 - 🔄 Analyze another notebook without refreshing
-- ⚡ FastAPI REST API backend
-- 🎨 Modern React + Vite frontend
-- 🧠 Separate ML models for code and execution risk
+- ⚡ FastAPI REST API
+- 🎨 React + Vite frontend
+- 🧠 Separate models for code and execution risk
+- ☁️ Production deployment with Vercel + Render
 
 ---
 
 ## 🧠 How It Works
 
-NotebookGuardian AI follows this pipeline:
+~~~text
+Jupyter Notebook
+      │
+      ▼
+Notebook Upload
+      │
+      ▼
+FastAPI /analyze
+      │
+      ▼
+Notebook Analyzer
+      │
+      ├───────────────┐
+      ▼               ▼
+Code Risk Model   Execution Risk Model
+      │               │
+      └───────┬───────┘
+              ▼
+       Risk Assessment
+              │
+              ▼
+       React Dashboard
+          │       │
+          ▼       ▼
+     Explanations  PDF Report
+~~~
 
-```text
-                 Jupyter Notebook
-                        │
-                        ▼
-                Notebook Upload
-                        │
-                        ▼
-              FastAPI Backend API
-                        │
-                        ▼
-              Notebook Analyzer
-                        │
-             ┌──────────┴──────────┐
-             ▼                     ▼
-       Code Risk Model      Execution Risk Model
-             │                     │
-             └──────────┬──────────┘
-                        ▼
-                 Risk Assessment
-                        │
-                        ▼
-              React Dashboard
-                        │
-          ┌─────────────┼─────────────┐
-          ▼             ▼             ▼
-      Risk Scores   Explanations   PDF Report
-```
+The two models evaluate different aspects of notebook risk so the dashboard can distinguish **structural/code concerns** from **execution/workflow concerns**.
 
 ---
 
 ## 🔬 Machine Learning
 
-NotebookGuardian AI was developed using notebook-level and cell-level features extracted from Jupyter notebooks.
+### Feature Engineering
 
-The feature engineering pipeline includes information such as:
+The pipeline extracts structural, semantic, and execution-related features including:
 
-- Source code length
-- Number of lines
+- Source-code length and line count
 - Syntax validity
-- Assignments
-- Function definitions
-- Function calls
-- Imports
-- Conditional statements
-- Loops
-- Exception handling
-- Returns
-- Loaded and stored names
-- Attributes
-- Subscripts
-- Constants
-- ML-related operations
-- File-reading operations
-- Execution state
-- Execution count
+- Assignments and function definitions
+- Function calls and imports
+- Conditionals and loops
+- Exception handling and returns
+- Loaded/stored names
+- Attributes, subscripts, and constants
+- ML operations such as <code>fit</code>, <code>predict</code>, and <code>transform</code>
+- File operations such as <code>read_csv</code> and <code>read_excel</code>
+- Notebook execution count
 - Previous execution count
-- Cell ordering
+- Cell ordering and execution state
 
-The project also uses AST-based analysis to extract structural information from Python code.
+Python **AST-based analysis** is used to extract code-structure features.
 
----
+### Combined Model Development
 
-## 📊 Model Performance
-
-### Combined Risk Model
-
-| Model | Accuracy | Precision | Recall | F1 Score |
+| Model | Accuracy | Precision | Recall | F1 |
 |---|---:|---:|---:|---:|
 | Logistic Regression Baseline | 82.01% | 30.41% | 77.63% | 43.70% |
 | Advanced AST Model | 82.84% | 31.15% | 75.00% | 44.02% |
 | Selected Feature Model | 83.08% | 31.69% | 76.32% | 44.79% |
 
-Threshold tuning was performed to balance precision and recall for the notebook risk detection workflow.
+Threshold tuning was used to balance precision and recall for the notebook review workflow.
 
-### Dual-Risk Models
+### Dual-Risk Thresholds
 
-NotebookGuardian AI uses separate models and thresholds for:
+~~~text
+Code Risk       → 0.70
+Execution Risk  → 0.60
+~~~
 
-**Code Risk**
-
-```text
-Threshold: 0.70
-```
-
-**Execution Risk**
-
-```text
-Threshold: 0.60
-```
-
-This allows the system to distinguish between potential code-related concerns and execution/workflow-related concerns.
+These thresholds are stored in the model configuration used by the deployed backend.
 
 ---
 
-## 📈 Dataset
+## 📊 Dataset
 
-The ML pipeline was developed using a dataset containing:
+The model-development dataset contains:
 
-- **3,643 notebook cells**
-- **111 notebook cases**
-- **3,364 normal cells**
-- **279 risky cells**
+| Metric | Count |
+|---|---:|
+| Notebook cells | **3,643** |
+| Notebook cases | **111** |
+| Normal cells | **3,364** |
+| Risky cells | **279** |
+| Risk percentage | **7.66%** |
 
-Risk categories include:
-
-- Code/source changes
-- Execution changes
-- Combined code and execution changes
-
-The project also includes generated feature datasets used during model development and evaluation.
+The dataset includes code/source changes, execution changes, and cells containing both types of changes.
 
 ---
-
-## 🌐 Production Architecture
-
-```text
-User
-  │
-  ▼
-Vercel — React + Vite Frontend
-  │
-  │ POST /analyze
-  ▼
-Render — FastAPI Backend
-  │
-  ▼
-Notebook Analyzer
-  │
-  ├── Code Risk Model
-  └── Execution Risk Model
-  │
-  ▼
-Cell-level Risk Results
-  │
-  ▼
-Dashboard + PDF Report
-```
-
-### Deployment
-
-- **Frontend:** Vercel
-- **Backend:** Render
-- **Source control:** GitHub
-- **ML inference:** scikit-learn + Joblib
 
 ## 🖥️ Dashboard
 
-The web application provides an interactive analysis dashboard where users can:
+The production dashboard provides:
 
-- View notebook summary information
-- See overall risk distribution
-- Search notebook cells
-- Filter cells by risk level
-- View individual risk scores
-- Inspect code
-- Understand why a cell was flagged
-- Review recommended actions
-
----
-
-## 💡 Risk Explanation
-
-For each flagged cell, NotebookGuardian AI provides a **Why is this flagged?** section.
-
-It presents:
-
-- Detected signals
-- Risk explanation
-- Dominant risk type
-- Review suggestion
-
-For dual-risk analysis, the system distinguishes between:
-
-```text
-Code Risk
-Execution Risk
-Both
-```
-
-This makes the model output easier to understand instead of showing only a raw probability.
-
----
-
-## 📄 PDF Reports
-
-NotebookGuardian AI can generate a downloadable PDF report containing:
-
-- Notebook name
-- Analysis timestamp
-- Model version
-- Risk thresholds
-- Total code cells
-- Flagged cells
-- Highest-risk cell
+- Notebook summary
+- Overall risk signal
 - Risk distribution
-- Dual-risk summary
-- Highest-risk cells
-- Detected reasons
+- Code and execution risk
+- Cell-level explanations
+- Detected signals
 - Review suggestions
-
----
-
-## 🛠️ Tech Stack
-
-### Frontend
-
-- React
-- Vite
-- JavaScript
-- CSS
-- Lucide React
-- jsPDF
-
-### Backend
-
-- Python
-- FastAPI
-- Uvicorn
-- Pandas
-- Scikit-learn
-- Joblib
-
-### Machine Learning
-
-- Logistic Regression
-- AST-based feature extraction
-- Feature engineering
-- Threshold tuning
-- Dual-risk classification
-
-### Development Tools
-
-- Git
-- GitHub
-- VS Code
-- Jupyter Notebook
-
----
-
-## 📁 Project Structure
-
-```text
-NotebookGuardian-AI/
-│
-├── backend/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── services/
-│       ├── __init__.py
-│       └── notebook_analyzer.py
-│
-├── frontend/
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── styles.css
-│   ├── index.html
-│   ├── package.json
-│   ├── package-lock.json
-│   └── vite.config.js
-│
-├── ml/
-│   ├── data/
-│   ├── models/
-│   │   ├── code_risk_model.joblib
-│   │   ├── execution_risk_model.joblib
-│   │   ├── notebookguardian_model.joblib
-│   │   ├── dual_model_config.json
-│   │   └── model_config.json
-│   │
-│   └── src/
-│
-├── docs/
-│   └── screenshots/
-│
-├── .env.example
-├── .gitignore
-└── README.md
-```
-
----
-
-## ⚙️ Local Installation
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/Ashutosh9-pan/NotebookGuardian-AI.git
-cd NotebookGuardian-AI
-```
-
----
-
-### 2. Backend Setup
-
-Create a Python virtual environment:
-
-```powershell
-python -m venv .venv
-```
-
-Activate it on Windows PowerShell:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Install backend dependencies:
-
-```powershell
-pip install -r backend/requirements.txt
-```
-
-Start the backend:
-
-```powershell
-python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
-```
-
-Backend API:
-
-```text
-http://127.0.0.1:8000
-```
-
-Health check:
-
-```text
-http://127.0.0.1:8000/health
-```
-
----
-
-### 3. Frontend Setup
-
-Open a second terminal and navigate to the frontend:
-
-```powershell
-cd frontend
-```
-
-Install dependencies:
-
-```powershell
-npm install
-```
-
-Create:
-
-```text
-frontend/.env
-```
-
-Add:
-
-```env
-VITE_API_URL=http://127.0.0.1:8000/analyze
-```
-
-Start the frontend:
-
-```powershell
-npm run dev
-```
-
-The frontend will be available at:
-
-```text
-http://localhost:5173
-```
-
----
-
-## 🔐 Environment Variables
-
-The frontend uses:
-
-```env
-VITE_API_URL=http://127.0.0.1:8000/analyze
-```
-
-For production, replace the local backend URL with the deployed API endpoint.
-
-The `.env` file is intentionally excluded from Git using `.gitignore`.
-
----
-
-## 📸 Screenshots
-
-Screenshots of the application will be added here.
+- Search/filter controls
+- Code preview
+- PDF report export
 
 ### Dashboard
 
@@ -459,50 +179,258 @@ Screenshots of the application will be added here.
 
 ---
 
-## 🧪 Example Analysis
+## 📄 PDF Reports
 
-A notebook containing multiple Python cells can be uploaded to NotebookGuardian AI.
+NotebookGuardian generates downloadable reports containing:
 
-The system analyzes each code cell and returns information such as:
-
-```text
-Cell #35
-Code Risk: 34.49%
-Execution Risk: 70.49%
-Risk Level: Medium
-```
-
-The dashboard allows the user to inspect the cell and understand the signals contributing to its risk classification.
+- Notebook name
+- Analysis timestamp
+- Model version
+- Risk thresholds
+- Total code cells
+- Flagged cells
+- Highest-risk cell
+- Risk distribution
+- Dual-risk summary
+- Detected signals
+- Review suggestions
 
 ---
 
-## 📌 Model Files
+## 🌐 Production Architecture
 
-The trained models are stored in:
+~~~text
+                     GitHub
+                        │
+                        ▼
+              ┌─────────────────┐
+              │ Vercel          │
+              │ React + Vite    │
+              └────────┬────────┘
+                       │
+                  POST /analyze
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ Render          │
+              │ FastAPI         │
+              └────────┬────────┘
+                       │
+                       ▼
+              ┌─────────────────┐
+              │ Notebook        │
+              │ Analyzer        │
+              └────────┬────────┘
+                       │
+              ┌────────┴────────┐
+              ▼                 ▼
+        Code Risk Model   Execution Risk Model
+              │                 │
+              └────────┬────────┘
+                       ▼
+                Cell-level Results
+                       │
+                       ▼
+                Dashboard + PDF
+~~~
 
-```text
-ml/models/
-```
+---
 
-Available model files:
+## 🛠️ Tech Stack
 
-```text
-code_risk_model.joblib
-execution_risk_model.joblib
-notebookguardian_model.joblib
-dual_model_config.json
-model_config.json
-```
+### Frontend
+- React
+- Vite
+- JavaScript
+- CSS
+- Lucide React
+- jsPDF
 
-These files are required by the backend for notebook analysis.
+### Backend
+- Python
+- FastAPI
+- Uvicorn
+- Pandas
+- scikit-learn
+- Joblib
+
+### Machine Learning
+- Logistic Regression
+- AST-based feature extraction
+- Feature engineering
+- Cross-validation
+- Threshold tuning
+- Dual-risk classification
+
+### Development & Deployment
+- Git
+- GitHub
+- VS Code
+- Jupyter Notebook
+- Vercel
+- Render
+
+---
+
+## 📁 Project Structure
+
+~~~text
+NotebookGuardian-AI/
+│
+├── backend/
+│   ├── main.py
+│   ├── requirements.txt
+│   └── services/
+│       ├── __init__.py
+│       └── notebook_analyzer.py
+│
+├── frontend/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │   └── styles.css
+│   ├── index.html
+│   ├── package.json
+│   └── vite.config.js
+│
+├── ml/
+│   ├── data/
+│   ├── models/
+│   │   ├── code_risk_model.joblib
+│   │   ├── execution_risk_model.joblib
+│   │   ├── notebookguardian_model.joblib
+│   │   ├── dual_model_config.json
+│   │   └── model_config.json
+│   └── src/
+│
+├── docs/
+│   └── screenshots/
+│
+├── .env.example
+├── .gitignore
+└── README.md
+~~~
+
+---
+
+## ⚙️ Run Locally
+
+### 1. Clone
+
+~~~bash
+git clone https://github.com/Ashutosh9-pan/NotebookGuardian-AI.git
+cd NotebookGuardian-AI
+~~~
+
+### 2. Backend
+
+Create and activate a virtual environment:
+
+~~~powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+~~~
+
+Install dependencies:
+
+~~~powershell
+pip install -r backend/requirements.txt
+~~~
+
+Start the API from the repository root:
+
+~~~powershell
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000
+~~~
+
+Backend:
+
+~~~text
+http://127.0.0.1:8000
+~~~
+
+Health check:
+
+~~~text
+http://127.0.0.1:8000/health
+~~~
+
+### 3. Frontend
+
+Open another terminal:
+
+~~~powershell
+cd frontend
+npm install
+~~~
+
+Create:
+
+~~~text
+frontend/.env
+~~~
+
+Add:
+
+~~~env
+VITE_API_URL=http://127.0.0.1:8000/analyze
+~~~
+
+Start Vite:
+
+~~~powershell
+npm run dev
+~~~
+
+Frontend:
+
+~~~text
+http://localhost:5173
+~~~
+
+---
+
+## 🔐 Environment Variables
+
+### Local
+
+~~~env
+VITE_API_URL=http://127.0.0.1:8000/analyze
+~~~
+
+The local <code>.env</code> file is excluded from Git.
+
+### Production
+
+The deployed frontend uses the Render API endpoint:
+
+~~~text
+https://notebookguardian-ai-1.onrender.com/analyze
+~~~
+
+---
+
+## 🧪 Example Analysis
+
+For each notebook cell, the system can expose separate risk signals.
+
+Example:
+
+~~~text
+Cell #35
+
+Code Risk:       34.49%
+Execution Risk:  70.49%
+Risk Level:      Medium
+~~~
+
+The dashboard then provides the detected signals and a review suggestion instead of exposing only a raw probability.
 
 ---
 
 ## 🔄 Development Workflow
 
-The project follows a development workflow consisting of:
-
-```text
+~~~text
 Dataset
    ↓
 Feature Extraction
@@ -522,20 +450,19 @@ Model Saving
 FastAPI Integration
    ↓
 React Dashboard
-```
+   ↓
+Vercel + Render Deployment
+~~~
 
 ---
 
 ## 🚀 Future Improvements
 
-Planned improvements may include:
-
 - 📚 Larger and more diverse notebook datasets
-- 🧠 More advanced ML models
+- 🧠 Additional ML models
 - 🔬 Explainable AI enhancements
 - 📊 Historical notebook comparison
 - 👥 User accounts and saved reports
-- ☁️ Cloud-based notebook analysis
 - 🔗 GitHub notebook integration
 
 ---
@@ -546,21 +473,13 @@ Planned improvements may include:
 
 **B.Tech CSE Graduate**
 
-AI/ML Developer | Data Analyst | Android Developer
-
-### Links
+AI/ML Developer · Data Analyst · Android Developer
 
 - GitHub: https://github.com/Ashutosh9-pan
 - Portfolio: https://ashutosh-panwar-portfolio.vercel.app/
 
 ---
 
-## 📜 License
-
-This project is intended for educational, portfolio, and research purposes.
-
----
-
 ## ⭐ Support
 
-If you find NotebookGuardian AI interesting, consider giving the repository a ⭐ on GitHub.
+If you find NotebookGuardian AI useful or interesting, consider giving the repository a ⭐ on GitHub.
