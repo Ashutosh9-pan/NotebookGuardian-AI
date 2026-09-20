@@ -10,7 +10,13 @@ It combines notebook metadata, code structure, execution state, and machine-lear
 
 ## 🚀 Live Demo
 
-**Coming soon**
+### 🌐 Production
+
+- **Live Application:** https://notebook-guardian-ai.vercel.app/
+- **Backend API:** https://notebookguardian-ai.onrender.com/
+- **GitHub Repository:** https://github.com/Ashutosh9-pan/NotebookGuardian-AI
+
+The production deployment uses **Vercel** for the React + Vite frontend and **Render** for the FastAPI backend and ML inference service.
 
 ---
 
@@ -152,6 +158,38 @@ Risk categories include:
 The project also includes generated feature datasets used during model development and evaluation.
 
 ---
+
+## 🌐 Production Architecture
+
+```text
+User
+  │
+  ▼
+Vercel — React + Vite Frontend
+  │
+  │ POST /analyze
+  ▼
+Render — FastAPI Backend
+  │
+  ▼
+Notebook Analyzer
+  │
+  ├── Code Risk Model
+  └── Execution Risk Model
+  │
+  ▼
+Cell-level Risk Results
+  │
+  ▼
+Dashboard + PDF Report
+```
+
+### Deployment
+
+- **Frontend:** Vercel
+- **Backend:** Render
+- **Source control:** GitHub
+- **ML inference:** scikit-learn + Joblib
 
 ## 🖥️ Dashboard
 
@@ -492,7 +530,6 @@ React Dashboard
 
 Planned improvements may include:
 
-- 🌐 Production deployment
 - 📚 Larger and more diverse notebook datasets
 - 🧠 More advanced ML models
 - 🔬 Explainable AI enhancements
